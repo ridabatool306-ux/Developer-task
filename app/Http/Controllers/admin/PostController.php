@@ -16,17 +16,30 @@ class PostController extends Controller
      */
     public function index()
     {
-        $post = Post::with('user','tags')->orderBy('id', 'asc')->get();
+        $user = Auth::user();
+
+        if ($user->role === 'admin' || $user->role === 'editor') {
+            // Admin & Editor can see all posts
+            $post = Post::with('user', 'tags')->orderBy('id', 'asc')->get();
+        } else {
+            // Normal User can see only their own posts
+            $post = Post::with('user', 'tags')
+                ->where('user_id', $user->id)
+                ->orderBy('id', 'asc')
+                ->get();
+        }
+
         return view('admin.post.view', compact('post'));
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $tags=tag::all();
-        return view('admin.post.add',compact('tags'));
+        $tags = tag::all();
+        return view('admin.post.add', compact('tags'));
     }
 
     /**
@@ -61,7 +74,7 @@ class PostController extends Controller
         $post->image   = $imagePath;
         $post->user_id = Auth::id(); // logged-in user ka id
 
-        $post->save(); 
+        $post->save();
 
         if ($request->has('tags')) {
             $post->tags()->attach($request->tags);
@@ -87,7 +100,7 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
         $tags = Tag::all();
-        return view('admin.post.update', compact('post','tags'));
+        return view('admin.post.update', compact('post', 'tags'));
     }
 
     /**

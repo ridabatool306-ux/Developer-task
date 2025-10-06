@@ -48,19 +48,19 @@
                                                     Reply
                                                 </a>
 
-                                                 @if ($comment->replies->count())
-                <div class="ms-4 mt-2">
-                    @foreach ($comment->replies as $reply)
-                        <div class="border rounded p-2 mb-2 bg-light">
-                            <strong>{{ $reply->user->name }}</strong>
-                            <span class="text-muted" style="font-size: 12px;">
-                                {{ $reply->created_at->diffForHumans() }}
-                            </span>
-                            <p class="mb-0">{{ $reply->comment }}</p>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+                                                @if ($comment->replies->count())
+                                                    <div class="ms-4 mt-2">
+                                                        @foreach ($comment->replies as $reply)
+                                                            <div class="border rounded p-2 mb-2 bg-light">
+                                                                <strong>{{ $reply->user->name }}</strong>
+                                                                <span class="text-muted" style="font-size: 12px;">
+                                                                    {{ $reply->created_at->diffForHumans() }}
+                                                                </span>
+                                                                <p class="mb-0">{{ $reply->comment }}</p>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
 
                                                 <!-- Show Reply Form ONLY if this comment is selected -->
                                                 @if (request('comment_id') == $comment->id)
@@ -88,7 +88,8 @@
                                         <form class="comment-form" action="{{ route('comments.store') }}" method="POST">
                                             @csrf
                                             <div class="input-group">
-                                              <input type="hidden" name="redirect_to" value="{{ url()->current() }}#comments-{{ $posts->id }}">
+                                                <input type="hidden" name="redirect_to"
+                                                    value="{{ url()->current() }}#comments-{{ $posts->id }}">
                                                 <input type="hidden" name="post_id" value="{{ $posts->id }}">
                                                 <input type="text" name="comment" class="form-control"
                                                     placeholder="Write a comment...">

@@ -1,0 +1,9 @@
+[
+    {
+        "name" : "ayan",
+        "email" : "ayan@gmail.com",
+        "password" : "123",
+        "role" : "user",
+        "image" : "users/30522.jpeg"
+    }
+]

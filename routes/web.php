@@ -10,23 +10,24 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ForgotPasswordController;
 
 //home page
-Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 //Register
-Route::view('register','register')->name('register');
-Route::post('registerSave',[UserController::class,'register'])->name('registerSave');
+    Route::view('register', 'register')->name('register')->middleware('can:isAdmin');
+    Route::post('registerSave', [UserController::class, 'register'])->name('registerSave');
+
 //login
-Route::view('login','login')->name('login');
-Route::post('loginMatch',[UserController::class,'login'])->name('loginMatch');
+Route::view('login', 'login')->name('login');
+Route::post('loginMatch', [UserController::class, 'login'])->name('loginMatch');
 //logout
-Route::post('logout',[UserController::class,'logout'])->name('logout');
+Route::post('logout', [UserController::class, 'logout'])->name('logout');
 
 //post 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('post', PostController::class);
+        Route::resource('post', PostController::class);
 });
 
 //tag 
-Route::resource('tag',tagController::class)->middleware(['auth']);
+    Route::resource('tag', tagController::class)->middleware('can:isAdmin');
 
 //Forgot Password
 Route::get('password/forgot', [ForgotPasswordController::class, 'forgotPassword'])->name('password.forgot');
@@ -39,6 +40,3 @@ Route::post('/comments', [CommentController::class, 'store'])->name('comments.st
 Route::get('/post/{post}', [CommentController::class, 'show'])->name('post.show');
 // web.php
 Route::get('/post/{post}/reply', [HomeController::class, 'index'])->name('post.reply');
-
-
-?>

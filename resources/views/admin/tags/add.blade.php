@@ -6,6 +6,13 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-6">
+                        @if ($errors->any())
+                            <ul class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                         <form action="{{ route('tag.store') }}" method="post">
                             @csrf
                             <div class="card">
@@ -15,7 +22,10 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" name="name">
+                                        <input type="text" class="form-control" name="name" value="{{ old('name') }}">
+                                        @error('name')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <div>

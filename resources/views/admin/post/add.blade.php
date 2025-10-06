@@ -6,6 +6,13 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-12 col-md-6 col-lg-6">
+                        @if ($errors->any())
+                            <ul class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
                         <form action="{{ route('post.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="card">
@@ -15,12 +22,19 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label>Title</label>
-                                        <input type="text" class="form-control" name="title">
+                                        <input type="text" class="form-control" name="title"
+                                            value="{{ old('title') }}">
+                                        @error('title')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
                                         <label>Content</label>
-                                        <textarea class="form-control" name="content"></textarea>
+                                        <textarea class="form-control" name="content" value="{{ old('content') }}"></textarea>
+                                        @error('content')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <div class="form-group">
@@ -36,6 +50,9 @@
                                                     </label>
                                                 </div>
                                             @endforeach
+                                            @error('tags')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                         </div>
                                     </div>
 
@@ -43,6 +60,9 @@
                                     <div class="form-group">
                                         <label>Image</label>
                                         <input type="file" name="image" class="form-control">
+                                        @error('image')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
 
                                     <div>
